@@ -1,0 +1,11 @@
+<!-- Gera o script sql da tabela, baseado nas entidades -->
+yarn typeorm migration:generate -d src/data-source src/migrations/createUsers
+
+<!-- Gera o script sql de atualização da tabela. Coloque como nome da migration a modificação realizada. -->
+yarn typeorm migration:generate -d src/data-source src/migrations/includeDefaultIsActiveStatus
+
+<!-- Cria/atualiza a tabela no banco de dados -->
+yarn typeorm migration:run -d src/data-source
+
+<!-- Desfaz a última alteração executada pelo migration no banco de dados -->
+yarn typeorm migration:revert -d src/data-source
