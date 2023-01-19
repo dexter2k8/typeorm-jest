@@ -1,8 +1,12 @@
 import "reflect-metadata";
 import "dotenv/config";
+import path from "path";
 import { DataSource, DataSourceOptions } from "typeorm";
 
 const setDataSourceConfig = (): DataSourceOptions => {
+    const entitiesPath: string = path.join(__dirname, "./entities/**.{js,ts}");
+    const migrationsPath: string = path.join(__dirname, "./migrations/**.{js,ts}");
+
     const nodeEnv = process.env.NODE_ENV;
 
     if (nodeEnv === "production") {
@@ -10,7 +14,7 @@ const setDataSourceConfig = (): DataSourceOptions => {
             type: "postgres",
             url: process.env.DATABASE_URL,
             entities: ["src/entities/**/*.ts"],
-            migrations: ["src/migrations/**/*.ts"],
+            migrations: [migrationsPath],
         };
     }
 
@@ -19,7 +23,7 @@ const setDataSourceConfig = (): DataSourceOptions => {
             type: "sqlite",
             database: ":memory:",
             synchronize: true,
-            entities: ["src/entities/**/*.ts"],
+            entities: [entitiesPath],
         };
     }
 
@@ -32,8 +36,8 @@ const setDataSourceConfig = (): DataSourceOptions => {
         database: process.env.DB,
         synchronize: false, // recria as tabelas com os dados das entities cada vez que inicia o servidor
         logging: true, // Exibe no console o log de querys geradas pelo typeorm
-        entities: ["src/entities/**/*.ts"],
-        migrations: ["src/migrations/**/*.ts"],
+        entities: [entitiesPath],
+        migrations: [migrationsPath],
     };
 };
 
